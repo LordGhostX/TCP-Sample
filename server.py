@@ -13,7 +13,7 @@ sock.bind(server_address)
 
 # Listen for incoming connections
 sock.listen(1)
-
+name = input("Welcome, your name >> ")
 while True:
     # Wait for a connection
     print('waiting for a connection')
@@ -23,11 +23,12 @@ while True:
 
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(16)
-            print('received {!r}'.format(data))
+            data = connection.recv(4096)
+            print(data.decode())
             if data:
+                data = "[ * ] " + name.upper() + " >> " + input("[ * ] " + name.upper() + " >> ")
                 print('sending data back to the client')
-                connection.sendall(data)
+                connection.sendall(data.encode('utf-8'))
             else:
                 print('no data from', client_address)
                 break
@@ -35,3 +36,5 @@ while True:
     finally:
         # Clean up the connection
         connection.close()
+        exit()
+
