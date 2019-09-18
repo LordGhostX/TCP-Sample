@@ -10,22 +10,26 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 10000)
 print('connecting to {} port {}'.format(*server_address))
 sock.connect(server_address)
-
+name = input('welcome, client name >> ')
 try:
     while True:
         # Send data
-        message = input("Enter message to send: ").encode()
-        sock.sendall(message)
+        message = "[ * ] " + name.upper() + " >> " + input("[ * ] " + name.upper() + " >> ")
+        sock.sendall(message.encode('utf-8'))
 
         # Look for the response
-        amount_received = 0
-        amount_expected = len(message)
+        # amount_received = 0
+        # amount_expected = len(message)
 
-        while amount_received < amount_expected:
-            data = sock.recv(16)
-            amount_received += len(data)
-            print('received message {}'.format(data.decode()))
+        data = sock.recv(4096)
+        if len(data.decode()) > 0:
+            print(data.decode())
+        else:
+            print('no data')
+            break
 
 finally:
     print('closing socket')
     sock.close()
+    exit()
+
